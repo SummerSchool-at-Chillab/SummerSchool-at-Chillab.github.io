@@ -1,0 +1,348 @@
+!(function() {
+  require(["jquery","slideout"], function($, Slideout) {
+    window.isuPageParams = window.isuPageParams || {};
+    $ = $.noConflict(true);
+
+    // OU login button
+    $('#ou_de').attr('href',$('#ou_login').attr('href'));
+
+    // Mobile slideout nav
+    if (document.getElementById('menu') !== null) {
+      window.slideout = new Slideout({
+        'panel': document.getElementById('container'),
+        'menu': document.getElementById('menu'),
+        'padding': 280,
+        'tolerance': 70,
+        'easing': 'cubic-bezier(.32,2,.55,.27)',
+        'touch': false,
+        'side': 'right'
+      });
+
+      slideout
+        .on('beforeopen', function() {
+          this.panel.classList.add('panel-open');
+        })
+        .on('open', function() {
+          this.panel.addEventListener('click', closeSlideout);
+        })
+        .on('beforeclose', function() {
+          this.panel.classList.remove('panel-open');
+          this.panel.removeEventListener('click', closeSlideout);
+        });
+    }
+
+    function closeSlideout(e) {
+      if(!window.slideout) return;
+      slideout.close();
+      e.preventDefault();
+      window.dataLayer && dataLayer.push({
+        event: 'GAEvent',
+        eventCategory: 'Slideout Menu',
+        eventAction: 'Slideout Close',
+        eventLabel: 'close'
+      });
+      return false;
+    }
+
+    function focusSearchOrMenu() {
+      var $iGuideMenuBtn = $('#isu-iguide-menu-btn');
+      if ($iGuideMenuBtn.is(':visible')) {
+        $iGuideMenuBtn.focus();
+      } else {
+        $('#isu-iguide-search-link').focus();
+      }
+    }
+
+    $('#t-slideout-nav__close').on('click', function(e) {
+      closeSlideout(e);
+      focusSearchOrMenu();
+
+      e.preventDefault();
+      return false;
+    });
+
+    $('.t-slideout-nav__closing').on('focus', function(e) {
+      setTimeout(function() {
+        closeSlideout(e);
+        focusSearchOrMenu()
+      }, 100);
+
+      e.preventDefault();
+      return false;
+    })
+
+    window.isuPageParams.menuClick = function(e) {
+      slideout.toggle();
+      $('#t-slideout-nav__menu').focus();
+      e.preventDefault();
+      if (slideout._opened) {
+        window.dataLayer && dataLayer.push({
+          event: 'GAEvent',
+          eventCategory: 'Slideout Menu',
+          eventAction: 'Menu Click',
+          eventLabel: 'open'
+        });
+      }
+      return false;
+    }
+
+    // Secondary nav
+
+    // Grab the mobile breakpoint from CSS with a default fallback value of 600px if the CSS var can't be read
+    var mobileBreakpoint = parseInt(getComputedStyle(document.body).getPropertyValue('--mq-small')) || 600;
+    // Set any details elements to open/closed on page load
+    $('.t-secondary-nav__wrap').prop('open', $(document.body).width() >= mobileBreakpoint);
+    // Update open/closed state on resize
+    $(window).resize(function(){
+      $('.t-secondary-nav__wrap').prop('open', $(document.body).width() >= mobileBreakpoint);
+    });
+    // Ignore clicks on desktop
+    $('.t-secondary-nav__wrap > .t-secondary-nav__title-wrap').click(function(){
+      return $(document.body).width() < mobileBreakpoint;
+    });
+
+    // Responsive accordions
+    var $accs = $(".js-easy-accordion-init");
+    if($accs.length !== 0){
+      require(["responsiveTabs"], function(responsiveTabs){
+        var accordionIDs = {};
+        var lastID = 0;
+        $accs.each(function(i, accordion){
+          // Ensure all accordions have a unique ID
+          if(accordionIDs[accordion.id])
+            accordion.id = "";
+          if(accordion.id === "")
+            accordion.id = "accordion-" + ++lastID;
+          accordionIDs[accordion.id] = true;
+
+          // Initialize this accordion
+          $('#' + accordion.id).easyResponsiveTabs({
+            type: 'accordion', //Types: default, vertical, accordion
+            width: 'auto', //auto or any width like 600px
+            fit: false,  // 100% fit in a container
+            closed: true, // closes all tabs upon load
+            accordionHeadingTag: 'h3' // Controls heading level, e.g. h2, h3, h4
+          });
+        });
+      });
+    }
+
+    // Slick Sliders
+    var sliders = {
+      '.js-slick-slider-init--standard': {
+        dots: false,
+        dotsClass: 'c-slick-slider__dots',
+        focusOnSelect: true,
+        infinite: false,
+        lazyLoad: 'ondemand',
+        centerMode: true,
+        initialSlide: 0.75,
+        mobileFirst: true,
+        prevArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--prev"><span class="visuallyhidden">Previous</span></button>',
+        nextArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--next"><span class="visuallyhidden">Next</span></button>',
+        responsive: [
+          {
+            breakpoint: 960,
+            settings: {
+              slidesToShow: 1.5,
+              slidesToScroll: 1
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          }
+        ],
+        slidesToShow: 1,
+        slidesToScroll: 1
+      },
+      '.js-slick-slider-init--slider':{
+        dots: false, 
+        dotsClass: 'c-slick-slider__dots',
+        focusOnSelect: true,
+        infinite: false, 
+        lazyLoad: 'ondemand',
+        slidesToShow: 1, 
+        accessibility: true, 
+        adaptiveHeight: true,
+				mobileFirst: true,
+				prevArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--prev"><span class="visuallyhidden">Previous</span></button>',
+				nextArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--next"><span class="visuallyhidden">Next</span></button>',
+        responsive: [
+          {
+            breakpoint: 960,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          }
+        ],
+        customPaging: function customPaging(slider, i) {
+          return '<span>' + (i + 1) + '</span><span>  ' + slider.slideCount + '</span>';
+        }
+      },
+      '.js-slick-slider-init--infinite': {
+        dots: false,
+        dotsClass: 'c-slick-slider__dots',
+        focusOnSelect: true,
+        infinite: true,
+        lazyLoad: 'ondemand',
+        centerMode: true,
+        initialSlide: 0.5,
+        mobileFirst: true,
+        prevArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--prev"><span class="visuallyhidden">Previous</span></button>',
+        nextArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--next"><span class="visuallyhidden">Next</span></button>',
+        responsive: [
+          {
+            breakpoint: 960,
+            settings: {
+              slidesToShow: 4,
+              slidesToScroll: 1
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 1.5,
+              slidesToScroll: 1
+            }
+          }
+        ],
+        slidesToShow: 1.5,
+        slidesToScroll: 1
+      },
+      '.js-slick-slider-init--infinite-bigger': {
+        dots: false,
+        dotsClass: 'c-slick-slider__dots',
+        focusOnSelect: true,
+        infinite: true,
+        lazyLoad: 'ondemand',
+        centerMode: true,
+        initialSlide: 0.5,
+        mobileFirst: true,
+        prevArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--prev"><span class="visuallyhidden">Previous</span></button>',
+        nextArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--next"><span class="visuallyhidden">Next</span></button>',
+        responsive: [
+          {
+            breakpoint: 960,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 1.5,
+              slidesToScroll: 1
+            }
+          }
+        ],
+        slidesToShow: 1.5,
+        slidesToScroll: 1
+      },
+      '.js-slick-slider-init--infinite-half': {
+        dots: false,
+        dotsClass: 'c-slick-slider__dots',
+        focusOnSelect: true,
+        infinite: true,
+        lazyLoad: 'ondemand',
+        centerMode: true,
+        initialSlide: 0.5,
+        mobileFirst: true,
+        prevArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--prev"><span class="visuallyhidden">Previous</span></button>',
+        nextArrow: '<button type="button" class="c-slick-slider__control c-slick-slider__control--next"><span class="visuallyhidden">Next</span></button>',
+        responsive: [
+          {
+            breakpoint: 960,
+            settings: {
+              slidesToShow: 1.5,
+              slidesToScroll: 1
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 1.5,
+              slidesToScroll: 1
+            }
+          }
+        ],
+        slidesToShow: 1.5,
+        slidesToScroll: 1
+      },
+    };
+    if($(Object.keys(sliders).join(",")).length !== 0){
+      require(["slick"], function(slick){
+        for(var selector in sliders){
+          // I'm not sure why, but Slick fails to initialize if you try to init multiple sliders in the same tick
+          // This SHOULD be able to just be $(selector).slick(sliders[selector]);
+          $(selector).each(function(i, slider){
+            setTimeout((function(selector){
+              $(slider).slick(sliders[selector]);
+            }).bind(this, selector), i);
+          });
+        }
+      });
+    }
+
+    // ARIA labelledby for sections
+    document.querySelectorAll('section').forEach(function(section){
+      var heading = section.querySelector('h1, h2:not(.t-secondary-nav__title)');
+      if(heading === null) return;
+      var slug = heading.id || heading.innerText.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      heading.setAttribute("id", slug);
+      if(section.getAttribute("aria-labelledby") === null)
+        section.setAttribute("aria-labelledby", slug);
+    });
+
+    // ARIA labels for phone numbers
+    $('a[href^="tel:"]').each(function(i, el){
+      var numbers = $(el).attr('href').replace(/[^0-9]/g, "");
+      var arr = numbers.split("");
+      if(arr.length === 11 && arr[0] === "1")
+        arr.shift();
+      if(arr.length === 10){
+        arr[2] += ".";
+        arr[5] += ".";
+        arr[9] += ".";
+      }else if($(el).attr('aria-label'))
+        return;
+      $(el).attr('aria-label', arr.join(" "));
+    });
+
+    // ARIA labels for links
+	  $('a[download]').attr('aria-label', function() {
+		  return this.textContent.trim() + ' (Download)';
+	  });
+	  $('a[href$=".doc"],a[href$=".docx"]').attr('aria-label', function() {
+	  	return this.textContent.trim() + ' (Word)';
+  	});
+	  $('a[href$=".xls"],a[href$=".xlsx"]').attr('aria-label', function() {
+		  return this.textContent.trim() + ' (Excel)';
+	  });
+	  $('a[href$=".ppt"],a[href$=".pptx"]').attr('aria-label', function() {
+		  return this.textContent.trim() + ' (PowerPoint)';
+	  });
+	  $('a[href$=".pdf"]').attr('aria-label', function() {
+		  return this.textContent.trim() + ' (PDF)';
+	  });
+	  $('a[href$=".zip"]').attr('aria-label', function() {
+		  return this.textContent.trim() + ' (ZIP)';
+	  });
+	  $('a[href^="http"]').attr('aria-label', function() {
+		  return this.textContent.trim() + ' (External)';
+	  });
+
+  });
+})();

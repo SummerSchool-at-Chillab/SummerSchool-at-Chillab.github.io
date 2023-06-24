@@ -1,0 +1,190 @@
+if (window.responsiveNav) {
+    var navigation = responsiveNav(".resp-nav", {
+        customToggle: "#nav-toggle-header",
+        animate: Modernizr.csstransitions,
+        jsClass: "js-nav"
+    });
+    /*for devices using Safari; overrides gray highlight*/
+    document.addEventListener("touchstart", function() {}, true);
+}
+
+document.getElementById('slideout-menu-btn').addEventListener("click", function() {
+	document.getElementById('container').style.transition = "-webkit-transform 300ms ease 0s";
+	document.getElementById('container').style.transform = "translateX(-280px)";
+	
+	var slideoutOpen = document.getElementsByTagName('html')[0];
+	slideoutOpen.classList.add('slideout-open');
+	
+	var slideoutMenu = document.querySelector('.t-slideout-nav');
+	slideoutMenu.classList.add('slideout-menu-open');
+	
+	var container = document.getElementById('container');
+  	container.classList.add('panel-open'); 
+	
+	var slideoutCloseButton = document.getElementById('slideout-menu-close-btn');
+	
+	setTimeout(function() {
+		 slideoutCloseButton.focus();
+	    }, 400);
+
+  }); 
+
+	
+window.onload = function() {
+
+	const mobileNavMenu = document.getElementById('menu');
+	if(!mobileNavMenu.classList.contains('slideout-menu', 'slideout-menu-right')){
+		mobileNavMenu.classList.add('slideout-menu', 'slideout-menu-right');
+	}
+	
+	var lastGlobalNavLink = document.querySelector(".t-global-nav .t-global-nav__list .t-global-nav__item:last-of-type .t-global-nav__link");
+	var slideoutCloseButton = document.getElementById('slideout-menu-close-btn');
+	
+	lastGlobalNavLink.addEventListener("blur", function() {
+		slideoutCloseButton.focus();
+	})
+	
+	slideoutCloseButton.addEventListener("blur", function() {
+		this.focusNextElement;
+	})
+	
+	document.getElementById('slideout-menu-close-btn').addEventListener("click", function() {
+		document.getElementById('container').style.transform = "translateX(0px)";
+		document.getElementById('container').style.transition = "-webkit-transform 300ms ease 0s";
+		
+		var closeContainer = document.getElementById('container');
+		closeContainer.classList.remove('panel-open');
+		
+		var closeSlideout = document.getElementsByTagName('html')[0];
+		
+		setTimeout(function() {
+		  closeSlideout.classList.remove('slideout-open');
+	    }, 400);
+		
+		var slideoutMenu = document.querySelector('.t-slideout-nav');
+		slideoutMenu.classList.remove('slideout-menu-open');
+		
+		var slideoutMenuButton = document.getElementById('slideout-menu-btn');
+		
+		setTimeout(function() {
+		  slideoutMenuButton.focus();
+	    }, 400);
+		
+	  }); 
+	
+	document.querySelector('.t-slideout-nav__closing').addEventListener("focus", function() {
+		document.getElementById('container').style.transform = "translateX(0px)";
+		document.getElementById('container').style.transition = "-webkit-transform 300ms ease 0s";
+		
+		var closeContainer = document.getElementById('container');
+		closeContainer.classList.remove('panel-open');
+		
+		var closeSlideout = document.getElementsByTagName('html')[0];
+		
+		setTimeout(function() {
+		  closeSlideout.classList.remove('slideout-open');
+	    }, 400);
+		
+		var slideoutMenu = document.querySelector('.t-slideout-nav');
+		slideoutMenu.classList.remove('slideout-menu-open');
+		
+		var slideoutMenuButton = document.getElementById('slideout-menu-btn');
+		
+		setTimeout(function() {
+		  slideoutMenuButton.focus();
+	    }, 400);
+		
+	  }); 
+	
+};
+
+$('#searchform').searchBox();
+
+$('#print_page').click(function() {
+    window.print();
+    return false;
+});
+$(document).ready(function() {
+        {
+            if (isuPageParams.swiper != undefined) {
+                var slides = 0;
+                var firstSlide = 0;
+                $('.gallery-top').each(function(index) {
+                        $parent = $(this).parent().closest('div');
+                        var autorotate = Boolean($(this).attr("autorotate"));
+                        if($(this).hasClass("swiper-main") && isuPageParams.autoRotateMarquee != undefined && isuPageParams.autoRotateMarquee == true)
+                        {
+                          autorotate = true;
+                        }
+                        var randomslide = Boolean($(this).attr("randomslide"));
+                        slides = $(this).find(".large-slide").length;
+                        firstSlide = (isuPageParams.swiperRandomSlide != undefined || randomslide == true ? Math.floor(Math.random() * slides) : 0);
+                        var galleryTop = new Swiper($(this)[0], {
+                                swiperContainer: $(this).parent().closest('div'),
+                                nextButton: $("div[id=" + $($parent).attr("id") + "]").find(".swiper-button-next"),
+                                prevButton: $("div[id=" + $($parent).attr("id") + "]").find(".swiper-button-prev"),
+                                countDisplay: '.swiper-slide-count',
+                                preloadImages: false,
+                                lazyLoading: true,
+                                centeredSlides: true,
+                                loop: true,
+                                loopedSlides: slides,
+                                hashnav: true,
+                                history: window.history,
+                                pagination: $(this).find(".swiper-pagination")[0],
+                                paginationClickable: true,
+                                paginationHide: (isuPageParams.pagination == "bullets" || isuPageParams.pagination == "fraction" || isuPageParams.pagination == "progress") ? (false) : (true),
+                                paginationElement: "span",
+                                paginationType: (isuPageParams.pagination == "bullets" || isuPageParams.pagination == "fraction" || isuPageParams.pagination == "progress") ? (isuPageParams.pagination) : (""),
+                                centeredSlides: true,
+                                slideToClickedSlide: true,
+                                grabCursor: true,
+                                autoplay: (isuPageParams.swiperAutoPlay == true || autorotate == true ? (6000) : (0)),
+                                initialSlide: firstSlide,
+
+                                onInit: function(swiper) {
+                                    if (swiper.params.history) {
+                                        swiper.hashnav.init();
+                                        swiper.params.hashnav = false;
+                                        var totalSlides = parseInt($(swiper.container).find('.swiper-slide').last().attr('data-swiper-slide-index'), 10) + 1;
+                                        var activeSlide = parseInt($(swiper.container).find('.swiper-slide-active').attr('data-swiper-slide-index'), 10) + 1;
+                                        $(swiper.params.swiperContainer[0]).find(swiper.params.countDisplay).html('<p><span class="swiper-slide-current">'+activeSlide+'</span> of <span class="swiper-slide-total" > '+totalSlides+' </span></p>');
+
+                                            swiper.on('onTransitionEnd', function(s, t) {
+                                                var newSlideHash = s.slides.eq(s.activeIndex).attr('data-hash');
+                                                history.replaceState(null, window.title, location.origin + location.pathname + "#" + newSlideHash);
+                                            });
+
+                                            swiper.on('onTransitionStart', function(s, t) {
+                                                var newCurrentSlide = parseInt(s.slides.eq(s.activeIndex).attr('data-swiper-slide-index'), 10) + 1;
+                                                $(swiper.params.swiperContainer[0]).find(".swiper-slide-current").text(newCurrentSlide);
+                                            });
+                                        }
+                                    }
+                                });
+                            if (isuPageParams.swiper == "gallery-thumbs") {
+                                $(galleryTop.params.swiperContainer).find('.gallery-thumbs').each(function(index) {
+                                    var galleryThumbs;
+                                    galleryThumbs = new Swiper($(this)[0], {
+                                        spaceBetween: 0,
+                                        centeredSlides: true,
+                                        slidesPerView: 'auto',
+                                        loopedSlides: slides,
+                                        loop: true,
+                                        slideToClickedSlide: true,
+                                        hashnav: false,
+                                        preloadImages: false,
+                                        initialSlide: parseInt($('.gallery-top .swiper-slide-active').attr('data-swiper-slide-index'), 10)
+                                    });
+
+                                    galleryTop.params.control = galleryThumbs;
+                                    galleryThumbs.params.control = galleryTop;
+                                });
+                            }
+                        });
+
+                }
+            }
+        });
+
+
