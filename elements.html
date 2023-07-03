@@ -107,7 +107,7 @@ function validatePass(){
 								<!-- Text stuff -->
 									<!-- <h2>What is Scientific Research?</h2>-->
 									<p>See you next year!</p>
-									<div class="slideshow-container">
+									<!--<div class="slideshow-container">
 
 <div class="mySlides fade">
   <img src="images/g1.jpg" style="width:100%; height:50%">
@@ -135,7 +135,209 @@ function validatePass(){
 </div>
 <br/>
 <h1 style="text-align:center"><a href="http://kkupgrader.blogspot.com/2020/11/how-to-create-slideshow-with-automatic-image-slide.html"></a></h1>-->									
-									<p style="font-size: 0.7rem"> About this website: This site is hosted via GitHuB Pages and made available primarily for particiapnts of the summer school. Resources and materials from Chillab are subject to copyright. External sources are cited/ credited wherever appropriate.<p>
+									<!--<p style="font-size: 0.7rem"> About this website: This site is hosted via GitHuB Pages and made available primarily for particiapnts of the summer school. Resources and materials from Chillab are subject to copyright. External sources are cited/ credited wherever appropriate.<p>>-->	
+									<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Merriweather", Georgia, serif;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  vertical-align: middle;
+}
+
+/* Position the image container (needed to position the left and right arrows) */
+.container {
+  position: relative;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* Container for image text */
+.caption-container {
+  text-align: center;
+  background-color: #222;
+  padding: 2px 16px;
+  color: white;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Six columns side by side */
+.column {
+  float: left;
+  width: 16.66%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+</style>
+<body>
+
+<h2 style="text-align:center"></h2>
+
+<div class="container">
+  <div class="mySlides">
+    <div class="numbertext">1 / 6</div>
+    <img src="images/ISRA-1.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">2 / 6</div>
+    <img src="images/ISRA-2.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">3 / 6</div>
+    <img src="images/ISRA-3.jpg" style="width:100%">
+  </div>
+    
+  <div class="mySlides">
+    <div class="numbertext">4 / 6</div>
+    <img src="images/ISRA-4.jpg" style="width:100%">
+  </div>
+
+  <div class="mySlides">
+    <div class="numbertext">5 / 6</div>
+    <img src="images/ISRA-5.jpg" style="width:100%">
+  </div>
+    
+  <div class="mySlides">
+    <div class="numbertext">6 / 6</div>
+    <img src="images/ISRA-6.jpg" style="width:100%">
+  </div>
+    
+  <a class="prev" onclick="plusSlides(-1)">❮</a>
+  <a class="next" onclick="plusSlides(1)">❯</a>
+
+  <div class="caption-container">
+    <p id="caption"></p>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <img class="demo cursor" src="images/ISRA-1.jpg" style="width:100%" onclick="currentSlide(1)" alt="Welcome to ISRA 2023">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="images/ISRA-2.jpg" style="width:100%" onclick="currentSlide(2)" alt="ISRA 2023 | Group Presentation">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="images/ISRA-3.jpg" style="width:100%" onclick="currentSlide(3)" alt="ISRA 2023 | Group Presentation">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="images/ISRA-4.jpg" style="width:100%" onclick="currentSlide(4)" alt="ISRA 2023 | Group Presentation">
+    </div>
+    <div class="column">
+      <img class="demo cursor" src="images/ISRA-5.jpg" style="width:100%" onclick="currentSlide(5)" alt="ISRA 2023 | Group Presentation">
+    </div>    
+    <div class="column">
+      <img class="demo cursor" src="images/ISRA-6.jpg" style="width:100%" onclick="currentSlide(6)" alt="ISRA 2023 | Closing Ceremony">
+    </div>
+  </div>
+</div>
+
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("demo");
+  let captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+    
+</body>
+
+
+
+<p style="font-size: 0.7rem"> About this website: This site is hosted via GitHuB Pages and made available primarily for particiapnts of the summer school. Resources and materials from Chillab are subject to copyright. External sources are cited/ credited wherever appropriate.<p>
+</html>
+
 									<header>
 										<!--<h3>Heading with a Subtitle</h3>
 										<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
